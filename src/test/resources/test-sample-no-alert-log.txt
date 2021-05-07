@@ -1,0 +1,4 @@
+{"id":"scsmbstgrx", "state":"STARTED", "timestamp":1491377495210}
+{"id":"scsmbstgrx", "state":"FINISHED", "timestamp":1491377495212}
+{"id":"scsmbstgry", "state":"STARTED", "timestamp":1491377495214}
+{"id":"scsmbstgry", "state":"FINISHED", "timestamp":1491377495218}

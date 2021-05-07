@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Build Log Processor</title>
+    <link rel="stylesheet" href="bulma.min.css">
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">-->
+    <script type="text/javascript">
+        function process(){
+            document.getElementById("processResMsg").innerHTML = "";
+            document.getElementById("processResErrMsg").innerHTML = "";
+            var str = document.getElementById("fileText").value;
+            if (str.length == 0) {
+                alert('Please provide valid path for log file');
+                return;
+            }else{
+              var json = JSON.stringify({
+                  filePath: str
+                });
+              var xhttp = new XMLHttpRequest();
+              xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                  var responseJson = JSON.parse(this.responseText);
+                  console.log(responseJson);
+                  if(responseJson['status'] == 'success'){
+                    document.getElementById("processResMsg").innerHTML = responseJson['msg'];
+                  }else{
+                    document.getElementById("processResErrMsg").innerHTML = 'server error';
+                  }
+                }
+              };
+              xhttp.open("POST", "/process", true);
+              xhttp.send(json);
+            }
+        }
+        function fetchData(){
+            document.getElementById("fetchResErrMsg").innerHTML = "";
+            var xhttp = new XMLHttpRequest();
+              xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                  var responseJson = JSON.parse(this.responseText);
+                  console.log(responseJson);
+                  if(responseJson['status'] == 'success'){
+                    renderResponse(responseJson['data'])
+                  }else{
+                    document.getElementById("fetchResErrMsg").innerHTML = 'server error fetching event data';
+                  }
+                }
+              };
+              xhttp.open("GET", "/fetch/50", true);
+              xhttp.send();
+        }
+        function renderResponse(responseJsonArray) {
+            //Build an array containing Customer records.
+            var events = new Array();
+            events.push(["Event Id", "Type", "Host", "Duration", "Alert"]);
+
+            //Create a HTML Table element.
+            var table = document.createElement("TABLE");
+            table.border = "1";
+            table.setAttribute('class', 'table');
+            //Get the count of columns.
+            var columnCount = events[0].length;
+
+            //Add the header row.
+            var row = table.insertRow(-1);
+            for (var i = 0; i < columnCount; i++) {
+                var headerCell = document.createElement("TH");
+                headerCell.innerHTML = events[0][i];
+                row.appendChild(headerCell);
+            }
+
+            //Add the data rows.
+            for (var i = 0; i < responseJsonArray.length; i++) {
+                row = table.insertRow(-1);
+                var cell = row.insertCell(-1);
+                cell.innerHTML = getValue(responseJsonArray[i]['eventId']);
+                cell = row.insertCell(-1);
+                cell.innerHTML = getValue(responseJsonArray[i]['eventType']);
+                cell = row.insertCell(-1);
+                cell.innerHTML = getValue(responseJsonArray[i]['eventHost']);
+                cell = row.insertCell(-1);
+                cell.innerHTML = getValue(responseJsonArray[i]['eventDuration']);
+                cell = row.insertCell(-1);
+                cell.innerHTML = getValue(responseJsonArray[i]['alertFlag']);
+            }
+            var dvTable = document.getElementById("dvTable");
+            dvTable.innerHTML = "";
+            dvTable.appendChild(table);
+        }
+        function getValue(str){
+            if(str){
+                return str;
+            }
+            return '';
+        }
+    </script>
+</head>
+<body>
+    <section class="section" style="padding:10px">
+        <div class="container">
+            <div class="field" style="width:50%">
+                <label class="label">Enter File path which needs to be processed!</label>
+                <div class="control">
+                    <input class="input is-primary is-normal" type="text" id="fileText">
+                </div>
+            </div>
+            <label class="label" style="color:blue;font-size:11px" id="processResMsg"></label>
+            <label class="label" style="color:red;font-size:11px" id="processResErrMsg"></label>
+            <div class="field">
+                <div class="control">
+                    <button class="button is-small is-primary" onclick="process()">Process File</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <hr />
+    <section class="section" style="padding:10px">
+        <div class="container">
+            <label class="label">Event Data</label>
+            <div class="field">
+                <div class="control">
+                    <button class="button is-small is-primary" onclick="fetchData()">Fetch Data</button>
+                </div>
+            </div>
+            <label class="label" style="color:red;font-size:11px" id="fetchResErrMsg"></label>
+            <div id="dvTable"></div>
+        </div>
+    </section>
+</body>
+</html>
