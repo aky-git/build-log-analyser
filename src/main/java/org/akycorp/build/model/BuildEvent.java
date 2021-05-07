@@ -1,5 +1,6 @@
 package org.akycorp.build.model;
 
+import org.akycorp.build.analyser.AppSetting;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -66,7 +67,7 @@ public class BuildEvent {
     }
 
     public String getAlertFlag() {
-        if(Objects.nonNull(getDuration()) && getDuration() > 4)
+        if(Objects.nonNull(getDuration()) && getDuration() > AppSetting.getMinBuildTimeForFlag())
             return "true";
         return "false";
     }

@@ -2,6 +2,7 @@ package org.akycorp.build;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.akycorp.build.analyser.AppSetting;
 import org.akycorp.build.analyser.BuildLogAnalyser;
 import org.akycorp.build.db.DBManager;
 import org.junit.Assert;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 public class TestBuildLogAnalyser {
     @Before
     public void setUpDB(){
+	AppSetting.setMinBuildTimeForFlag(4);
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setDriverClassName("org.hsqldb.jdbc.JDBCDriver");
         hikariConfig.setUsername("sa");

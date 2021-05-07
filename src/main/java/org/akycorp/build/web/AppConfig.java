@@ -2,6 +2,7 @@ package org.akycorp.build.web;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.akycorp.build.analyser.AppSetting;
 import org.akycorp.build.db.DBManager;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,8 @@ public class AppConfig {
 
     @PostConstruct
     public void init(){
+	// set min build time for no alert to 4
+        AppSetting.setMinBuildTimeForFlag(4);
         HikariConfig hikariConfig = new HikariConfig();
         //hikariConfig.setDataSourceClassName(driver);
         hikariConfig.setDriverClassName("org.hsqldb.jdbc.JDBCDriver");
