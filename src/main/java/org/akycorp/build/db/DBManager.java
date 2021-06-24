@@ -100,8 +100,11 @@ public class DBManager {
             ResultSet result = null;
             try {
                 statement = connection.createStatement();
-                result = statement.executeQuery(
-                        "SELECT * FROM EVENT_TBL limit " + limit);
+                String query = "SELECT * FROM EVENT_TBL limit";
+                if(limit > 0){
+                    query = query.concat(" " + limit);
+                }
+                result = statement.executeQuery(query);
                 while(result.next()){
                     Map<String, String> row = new HashMap<>();
                     row.put("eventId", result.getString("EVENT_ID"));

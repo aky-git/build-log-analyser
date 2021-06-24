@@ -40,4 +40,16 @@ public class ProcessController {
         responseMap.put("data", resposeList);
         return gson.toJson(responseMap);
     }
+
+    @GetMapping("/fetchAll")
+    public String fetchAll() throws Exception {
+        long start = System.currentTimeMillis();
+        ArrayList<Map<String, String>> resposeList = DBManager.fetchEvents(-1);
+        long millis = (System.currentTimeMillis() - start)/1000;
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", "success");
+        responseMap.put("msg", "data fetched in " + millis + " ms");
+        responseMap.put("data", resposeList);
+        return gson.toJson(responseMap);
+    }
 }

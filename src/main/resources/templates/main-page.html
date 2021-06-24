@@ -36,6 +36,12 @@
         }
         function fetchData(){
             document.getElementById("fetchResErrMsg").innerHTML = "";
+            var limit = document.getElementById("limitText").value;
+            var urlStr = "fetchAll";
+            if(limit && parseInt(limit) > 0){
+                alert(limit);
+                urlStr = "/fetch/"+limit;
+            }
             var xhttp = new XMLHttpRequest();
               xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
@@ -48,7 +54,7 @@
                   }
                 }
               };
-              xhttp.open("GET", "/fetch/50", true);
+              xhttp.open("GET", urlStr, true);
               xhttp.send();
         }
         function renderResponse(responseJsonArray) {
@@ -96,6 +102,11 @@
             return '';
         }
     </script>
+    <style>
+        .text-label{
+            font-size: 12px;
+        }
+    </style>
 </head>
 <body>
     <section class="section" style="padding:10px">
@@ -119,6 +130,12 @@
     <section class="section" style="padding:10px">
         <div class="container">
             <label class="label">Event Data</label>
+            <div class="field" style="width:50%">
+                <label class="text-label">Enter No of records to fetch (leave blank to fetch all records)</label>
+                <div class="control">
+                    <input class="input is-primary is-normal" type="number" id="limitText">
+                </div>
+            </div>
             <div class="field">
                 <div class="control">
                     <button class="button is-small is-primary" onclick="fetchData()">Fetch Data</button>

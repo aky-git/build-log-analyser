@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class TestBuildLogAnalyser {
     @Before
     public void setUpDB(){
-	AppSetting.setMinBuildTimeForFlag(4);
+	    AppSetting.setMinBuildTimeForFlag(4);
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setDriverClassName("org.hsqldb.jdbc.JDBCDriver");
         hikariConfig.setUsername("sa");

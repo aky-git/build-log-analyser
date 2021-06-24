@@ -13,9 +13,15 @@ import javax.sql.DataSource;
 public class MainApplication {
 
     public static void main(String[] args) {
+        if(args.length < 1){
+            System.out.println("-------------------------");
+            System.out.println("please provide file path for analysis with as first argument");
+            System.exit(0);
+        }
+        String filePath = args[0];
         MainApplication app = new MainApplication();
         app.setUpDB();
-        app.start();
+        app.start(filePath);
     }
 
     private void setUpDB() {
@@ -31,12 +37,20 @@ public class MainApplication {
         DBManager.createDBTables();
     }
 
-    private void start() {
+    private void start(String filePath) {
+        try {
+            BuildLogAnalyser buildLogAnalyser = new BuildLogAnalyser(filePath);
+            buildLogAnalyser.process();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    /*private void start() {
         try {
             BuildLogAnalyser buildLogAnalyser = new BuildLogAnalyser("src/main/resources/sample-log.txt");
             buildLogAnalyser.process();
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 }
